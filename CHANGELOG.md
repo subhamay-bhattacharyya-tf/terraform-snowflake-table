@@ -12,9 +12,11 @@
 ### 🚜 Refactor
 
 - *(main)* Replace lookup functions with direct map access
+- *(examples)* Replace ternary operators with coalesce function
 
 ### 📚 Documentation
 
+- Update CHANGELOG.md [skip ci]
 - Update CHANGELOG.md [skip ci]
 - Update CHANGELOG.md [skip ci]
 - Update CHANGELOG.md [skip ci]
