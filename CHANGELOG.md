@@ -18,6 +18,11 @@
 - Update CHANGELOG.md [skip ci]
 - Update CHANGELOG.md [skip ci]
 - Update CHANGELOG.md [skip ci]
+- Update CHANGELOG.md [skip ci]
+
+### 🧪 Testing
+
+- Add explicit nil values and alignment to table config tests
 
 ### ⚙️ Miscellaneous Tasks
 
