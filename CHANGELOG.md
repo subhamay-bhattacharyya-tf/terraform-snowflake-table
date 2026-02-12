@@ -24,6 +24,7 @@
 - Update CHANGELOG.md [skip ci]
 - *(examples)* Update provider reference and refactor configuration
 - Update CHANGELOG.md [skip ci]
+- Update CHANGELOG.md [skip ci]
 
 ### 🧪 Testing
 
@@ -33,3 +34,4 @@
 ### ⚙️ Miscellaneous Tasks
 
 - *(examples)* Update module source to local path reference
+- Update snowflake provider version constraint to ~> 0.99.0
