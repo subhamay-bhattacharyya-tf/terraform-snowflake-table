@@ -23,10 +23,12 @@
 - Update CHANGELOG.md [skip ci]
 - Update CHANGELOG.md [skip ci]
 - *(examples)* Update provider reference and refactor configuration
+- Update CHANGELOG.md [skip ci]
 
 ### 🧪 Testing
 
 - Add explicit nil values and alignment to table config tests
+- *(snowflake)* Add database context setup in table tests
 
 ### ⚙️ Miscellaneous Tasks
 
