@@ -162,7 +162,12 @@ func TestMultipleTables(t *testing.T) {
 	defer terraform.Destroy(t, tfOptions)
 	terraform.InitAndApply(t, tfOptions)
 
+	// Wait for Snowflake to propagate the tables
 	time.Sleep(retrySleep)
+
+	// Use the database context for the query
+	_, err := db.Exec(fmt.Sprintf("USE DATABASE %s", dbName))
+	require.NoError(t, err, "Failed to use database")
 
 	// Verify all three tables exist
 	for _, tblName := range []string{usersTable, ordersTable, productsTable} {

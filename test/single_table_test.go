@@ -87,7 +87,12 @@ func TestSingleTable(t *testing.T) {
 	defer terraform.Destroy(t, tfOptions)
 	terraform.InitAndApply(t, tfOptions)
 
+	// Wait for Snowflake to propagate the table
 	time.Sleep(retrySleep)
+
+	// Use the database context for the query
+	_, err := db.Exec(fmt.Sprintf("USE DATABASE %s", dbName))
+	require.NoError(t, err, "Failed to use database")
 
 	exists := tableExists(t, db, dbName, "PUBLIC", tableName)
 	require.True(t, exists, "Expected table %q to exist in Snowflake", tableName)
