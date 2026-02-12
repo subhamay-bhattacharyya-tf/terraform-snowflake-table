@@ -34,28 +34,38 @@ func TestSingleTable(t *testing.T) {
 
 	tableConfigs := map[string]interface{}{
 		"test_table": map[string]interface{}{
-			"database": dbName,
-			"schema":   "PUBLIC",
-			"name":     tableName,
-			"comment":  "Terratest single table test",
+			"database":                    dbName,
+			"schema":                      "PUBLIC",
+			"name":                        tableName,
+			"comment":                     "Terratest single table test",
+			"cluster_by":                  nil,
+			"data_retention_time_in_days": 1,
+			"change_tracking":             false,
 			"columns": []interface{}{
 				map[string]interface{}{
 					"name":     "ID",
 					"type":     "NUMBER(38,0)",
 					"nullable": false,
+					"default":  nil,
+					"comment":  nil,
 				},
 				map[string]interface{}{
 					"name":     "NAME",
 					"type":     "VARCHAR(255)",
 					"nullable": true,
+					"default":  nil,
+					"comment":  nil,
 				},
 				map[string]interface{}{
 					"name":     "CREATED_AT",
 					"type":     "TIMESTAMP_NTZ",
 					"nullable": false,
+					"default":  nil,
+					"comment":  nil,
 				},
 			},
 			"primary_key": map[string]interface{}{
+				"name": nil,
 				"keys": []string{"ID"},
 			},
 		},
