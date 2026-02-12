@@ -2,10 +2,8 @@
 # Single Table Example
 # -----------------------------------------------------------------------------
 
-module "table" {
-  source = "../../"
-
-  table_configs = {
+locals {
+  default_table_configs = {
     "users_table" = {
       database = "MY_DATABASE"
       schema   = "PUBLIC"
@@ -33,4 +31,19 @@ module "table" {
       }
     }
   }
+}
+
+provider "snowflake" {
+  organization_name = var.snowflake_organization_name
+  account_name      = var.snowflake_account_name
+  user              = var.snowflake_user
+  role              = var.snowflake_role
+  private_key       = var.snowflake_private_key
+  authenticator     = var.snowflake_private_key != null ? "JWT" : null
+}
+
+module "table" {
+  source = "../../"
+
+  table_configs = var.table_configs != null ? var.table_configs : local.default_table_configs
 }

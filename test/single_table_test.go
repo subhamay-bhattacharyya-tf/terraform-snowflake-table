@@ -22,7 +22,7 @@ func TestSingleTable(t *testing.T) {
 	dbName := fmt.Sprintf("TT_DB_%s", unique)
 	tableName := fmt.Sprintf("TT_TABLE_%s", unique)
 
-	tfDir := "../examples/basic"
+	tfDir := "../examples/single-table"
 
 	// Create test database first
 	db := openSnowflake(t)
