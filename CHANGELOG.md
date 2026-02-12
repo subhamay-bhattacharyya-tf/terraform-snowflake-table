@@ -9,8 +9,13 @@
 
 - *(examples)* Update Snowflake authenticator to use SNOWFLAKE_JWT
 
+### 🚜 Refactor
+
+- *(main)* Replace lookup functions with direct map access
+
 ### 📚 Documentation
 
+- Update CHANGELOG.md [skip ci]
 - Update CHANGELOG.md [skip ci]
 - Update CHANGELOG.md [skip ci]
 
