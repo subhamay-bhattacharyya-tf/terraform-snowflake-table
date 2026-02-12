@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 module "tables" {
-  source = "github.com/subhamay-bhattacharyya-tf/terraform-snowflake-table"
+  source = "../../"
 
   table_configs = {
     "users_table" = {
