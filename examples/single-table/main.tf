@@ -45,5 +45,5 @@ provider "snowflake" {
 module "table" {
   source = "../../"
 
-  table_configs = var.table_configs != null ? var.table_configs : local.default_table_configs
+  table_configs = coalesce(var.table_configs, local.default_table_configs)
 }
