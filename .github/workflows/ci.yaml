@@ -8,11 +8,15 @@ on:
       - 'feature/**'
       - 'bug/**'
     paths:
-      - modules/**
+      - '*.tf'
+      - 'examples/**'
+      - 'test/**'
   pull_request:
     branches: [main]
     paths:
-      - modules/**
+      - '*.tf'
+      - 'examples/**'
+      - 'test/**'
   workflow_dispatch:
 
 permissions:
@@ -27,10 +31,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TF_VERSION: ${{ vars.TERRAFORM_VERSION || '1.3.0' }}
-    strategy:
-      matrix:
-        module:
-          - modules/snowflake-warehouse
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -42,15 +42,12 @@ jobs:
 
       - name: Terraform Format Check
         run: terraform fmt -check -recursive
-        working-directory: ${{ matrix.module }}
 
       - name: Terraform Init
         run: terraform init -backend=false
-        working-directory: ${{ matrix.module }}
 
       - name: Terraform Validate
         run: terraform validate
-        working-directory: ${{ matrix.module }}
 
   # ============================================================================
   # Validate Examples
@@ -64,8 +61,8 @@ jobs:
     strategy:
       matrix:
         example:
-          - examples/basic
-          - examples/multiple-warehouses
+          - examples/single-table
+          - examples/multiple-tables
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -115,14 +112,14 @@ jobs:
           go mod download
         working-directory: test
 
-      - name: Run Terratest - Single Warehouse
-        id: single-warehouse-test
+      - name: Run Terratest - Single Table
+        id: single-table-test
         run: |
           set -o pipefail
-          go test -v -timeout 30m -run TestSingleWarehouse 2>&1 | tee single_warehouse_output.txt
-          echo "## Single Warehouse Test Results" >> $GITHUB_STEP_SUMMARY
+          go test -v -timeout 30m -run TestSingleTable 2>&1 | tee single_table_output.txt
+          echo "## Single Table Test Results" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-          cat single_warehouse_output.txt >> $GITHUB_STEP_SUMMARY
+          cat single_table_output.txt >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
         working-directory: test
         env:
@@ -132,14 +129,14 @@ jobs:
           SNOWFLAKE_ROLE: ${{ vars.SNOWFLAKE_ROLE }}
           SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }}
 
-      - name: Run Terratest - Multiple Warehouses
-        id: multiple-warehouses-test
+      - name: Run Terratest - Multiple Tables
+        id: multiple-tables-test
         run: |
           set -o pipefail
-          go test -v -timeout 30m -run TestMultipleWarehouses 2>&1 | tee multiple_warehouses_output.txt
-          echo "## Multiple Warehouses Test Results" >> $GITHUB_STEP_SUMMARY
+          go test -v -timeout 30m -run TestMultipleTables 2>&1 | tee multiple_tables_output.txt
+          echo "## Multiple Tables Test Results" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-          cat multiple_warehouses_output.txt >> $GITHUB_STEP_SUMMARY
+          cat multiple_tables_output.txt >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
         working-directory: test
         env:
@@ -210,5 +207,13 @@ jobs:
 
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v6
+        with:
+          extra_plugins: |
+            @semantic-release/commit-analyzer@13.0.0
+            @semantic-release/release-notes-generator@14.0.0
+            @semantic-release/changelog@6.0.3
+            @semantic-release/git@10.0.1
+            @semantic-release/github@11.0.0
+            conventional-changelog-conventionalcommits@9.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
