@@ -121,13 +121,13 @@ module "tables" {
 | Name | Version |
 |------|---------|
 | terraform | >= 1.3.0 |
-| snowflake | >= 0.87.0 |
+| snowflake | ~> 0.99.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| snowflakedb/snowflake | >= 0.87.0 |
+| snowflakedb/snowflake | ~> 0.99.0 |
 
 ## Inputs
 
