@@ -21,6 +21,8 @@
 - Update CHANGELOG.md [skip ci]
 - Update CHANGELOG.md [skip ci]
 - Update CHANGELOG.md [skip ci]
+- Update CHANGELOG.md [skip ci]
+- *(examples)* Update provider reference and refactor configuration
 
 ### 🧪 Testing
 
