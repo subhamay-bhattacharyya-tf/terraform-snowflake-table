@@ -15,10 +15,11 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-type WarehouseProps struct {
-	Name    string
-	Size    string
-	Comment string
+type TableProps struct {
+	Name     string
+	Database string
+	Schema   string
+	Comment  string
 }
 
 func openSnowflake(t *testing.T) *sql.DB {
@@ -71,10 +72,10 @@ func openSnowflake(t *testing.T) *sql.DB {
 	return db
 }
 
-func warehouseExists(t *testing.T, db *sql.DB, warehouseName string) bool {
+func tableExists(t *testing.T, db *sql.DB, database, schema, tableName string) bool {
 	t.Helper()
 
-	q := fmt.Sprintf("SHOW WAREHOUSES LIKE '%s';", escapeLike(warehouseName))
+	q := fmt.Sprintf("SHOW TABLES LIKE '%s' IN %s.%s;", escapeLike(tableName), database, schema)
 	rows, err := db.Query(q)
 	require.NoError(t, err)
 	defer func() { _ = rows.Close() }()
@@ -82,13 +83,10 @@ func warehouseExists(t *testing.T, db *sql.DB, warehouseName string) bool {
 	return rows.Next()
 }
 
-func fetchWarehouseProps(t *testing.T, db *sql.DB, warehouseName string) WarehouseProps {
+func fetchTableProps(t *testing.T, db *sql.DB, database, schema, tableName string) TableProps {
 	t.Helper()
 
-	// SHOW WAREHOUSES returns columns in a specific order. We need to scan all columns
-	// to get name (col 0), size (col 3), and comment (col 10 in newer versions).
-	// Using a simpler approach: query rows and scan by column name using rows.Columns()
-	q := fmt.Sprintf("SHOW WAREHOUSES LIKE '%s';", escapeLike(warehouseName))
+	q := fmt.Sprintf("SHOW TABLES LIKE '%s' IN %s.%s;", escapeLike(tableName), database, schema)
 	rows, err := db.Query(q)
 	require.NoError(t, err)
 	defer func() { _ = rows.Close() }()
@@ -96,23 +94,23 @@ func fetchWarehouseProps(t *testing.T, db *sql.DB, warehouseName string) Warehou
 	cols, err := rows.Columns()
 	require.NoError(t, err)
 
-	// Find column indices for name, size, comment
-	nameIdx, sizeIdx, commentIdx := -1, -1, -1
+	// Find column indices for name, database_name, schema_name, comment
+	nameIdx, dbIdx, schemaIdx, commentIdx := -1, -1, -1, -1
 	for i, col := range cols {
 		switch col {
 		case "name":
 			nameIdx = i
-		case "size":
-			sizeIdx = i
+		case "database_name":
+			dbIdx = i
+		case "schema_name":
+			schemaIdx = i
 		case "comment":
 			commentIdx = i
 		}
 	}
-	require.NotEqual(t, -1, nameIdx, "name column not found in SHOW WAREHOUSES output")
-	require.NotEqual(t, -1, sizeIdx, "size column not found in SHOW WAREHOUSES output")
-	require.NotEqual(t, -1, commentIdx, "comment column not found in SHOW WAREHOUSES output")
+	require.NotEqual(t, -1, nameIdx, "name column not found in SHOW TABLES output")
 
-	require.True(t, rows.Next(), "No warehouse found matching %s", warehouseName)
+	require.True(t, rows.Next(), "No table found matching %s", tableName)
 
 	// Create slice to hold all column values
 	values := make([]interface{}, len(cols))
@@ -138,11 +136,32 @@ func fetchWarehouseProps(t *testing.T, db *sql.DB, warehouseName string) Warehou
 		return fmt.Sprintf("%v", v)
 	}
 
-	return WarehouseProps{
-		Name:    getName(values[nameIdx]),
-		Size:    getName(values[sizeIdx]),
-		Comment: getName(values[commentIdx]),
+	props := TableProps{
+		Name: getName(values[nameIdx]),
 	}
+	if dbIdx >= 0 {
+		props.Database = getName(values[dbIdx])
+	}
+	if schemaIdx >= 0 {
+		props.Schema = getName(values[schemaIdx])
+	}
+	if commentIdx >= 0 {
+		props.Comment = getName(values[commentIdx])
+	}
+
+	return props
+}
+
+func createTestDatabase(t *testing.T, db *sql.DB, dbName string) {
+	t.Helper()
+	_, err := db.Exec(fmt.Sprintf("CREATE DATABASE IF NOT EXISTS %s", dbName))
+	require.NoError(t, err, "Failed to create test database")
+}
+
+func dropTestDatabase(t *testing.T, db *sql.DB, dbName string) {
+	t.Helper()
+	_, err := db.Exec(fmt.Sprintf("DROP DATABASE IF EXISTS %s", dbName))
+	require.NoError(t, err, "Failed to drop test database")
 }
 
 func mustEnv(t *testing.T, key string) string {
