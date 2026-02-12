@@ -3,9 +3,9 @@
 # -----------------------------------------------------------------------------
 
 variable "table_configs" {
-  description = "Map of table configurations (override for testing)"
+  description = "Map of table configurations"
   type        = any
-  default     = null
+  default     = {}
 }
 
 variable "snowflake_organization_name" {

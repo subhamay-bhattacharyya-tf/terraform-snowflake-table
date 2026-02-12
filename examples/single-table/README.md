@@ -4,36 +4,34 @@ This example demonstrates how to create a single Snowflake table using the terra
 
 ## Usage
 
-```hcl
-module "table" {
-  source = "github.com/subhamay-bhattacharyya-tf/terraform-snowflake-table"
+Create a `terraform.tfvars` file:
 
-  table_configs = {
-    "users_table" = {
-      database = "MY_DATABASE"
-      schema   = "PUBLIC"
-      name     = "USERS"
-      comment  = "User information table"
-      columns = [
-        {
-          name     = "ID"
-          type     = "NUMBER(38,0)"
-          nullable = false
-        },
-        {
-          name     = "EMAIL"
-          type     = "VARCHAR(255)"
-          nullable = false
-        },
-        {
-          name     = "CREATED_AT"
-          type     = "TIMESTAMP_NTZ"
-          nullable = false
-        }
-      ]
-      primary_key = {
-        keys = ["ID"]
+```hcl
+table_configs = {
+  "users_table" = {
+    database = "MY_DATABASE"
+    schema   = "PUBLIC"
+    name     = "USERS"
+    comment  = "User information table"
+    columns = [
+      {
+        name     = "ID"
+        type     = "NUMBER(38,0)"
+        nullable = false
+      },
+      {
+        name     = "EMAIL"
+        type     = "VARCHAR(255)"
+        nullable = false
+      },
+      {
+        name     = "CREATED_AT"
+        type     = "TIMESTAMP_NTZ"
+        nullable = false
       }
+    ]
+    primary_key = {
+      keys = ["ID"]
     }
   }
 }

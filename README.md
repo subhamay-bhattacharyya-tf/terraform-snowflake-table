@@ -127,7 +127,7 @@ module "tables" {
 
 | Name | Version |
 |------|---------|
-| snowflake | >= 0.87.0 |
+| snowflakedb/snowflake | >= 0.87.0 |
 
 ## Inputs
 
