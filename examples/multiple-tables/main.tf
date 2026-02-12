@@ -60,7 +60,7 @@ provider "snowflake" {
   user              = var.snowflake_user
   role              = var.snowflake_role
   private_key       = var.snowflake_private_key
-  authenticator     = var.snowflake_private_key != null ? "JWT" : null
+  authenticator     = var.snowflake_private_key != null ? "SNOWFLAKE_JWT" : null
 }
 
 module "tables" {
