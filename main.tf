@@ -13,28 +13,33 @@ resource "snowflake_table" "this" {
   database                    = each.value.database
   schema                      = each.value.schema
   name                        = each.value.name
-  comment                     = lookup(each.value, "comment", null)
-  cluster_by                  = lookup(each.value, "cluster_by", null)
-  data_retention_time_in_days = lookup(each.value, "data_retention_time_in_days", 1)
-  change_tracking             = lookup(each.value, "change_tracking", false)
+  comment                     = each.value.comment
+  cluster_by                  = each.value.cluster_by
+  data_retention_time_in_days = each.value.data_retention_time_in_days
+  change_tracking             = each.value.change_tracking
 
   dynamic "column" {
     for_each = each.value.columns
     content {
       name     = column.value.name
       type     = column.value.type
-      nullable = lookup(column.value, "nullable", true)
-      default {
-        constant = lookup(column.value, "default", null)
+      nullable = column.value.nullable
+
+      dynamic "default" {
+        for_each = column.value.default != null ? [column.value.default] : []
+        content {
+          constant = default.value
+        }
       }
-      comment = lookup(column.value, "comment", null)
+
+      comment = column.value.comment
     }
   }
 
   dynamic "primary_key" {
-    for_each = lookup(each.value, "primary_key", null) != null ? [each.value.primary_key] : []
+    for_each = each.value.primary_key != null ? [each.value.primary_key] : []
     content {
-      name = lookup(primary_key.value, "name", null)
+      name = primary_key.value.name
       keys = primary_key.value.keys
     }
   }
