@@ -42,6 +42,6 @@ resource "snowflake_table_constraint" "primary_key" {
 
   name     = each.value.primary_key.name != null ? each.value.primary_key.name : "${each.value.name}_PK"
   type     = "PRIMARY KEY"
-  table_id = snowflake_table.this[each.key].qualified_name
+  table_id = "${snowflake_table.this[each.key].database}.${snowflake_table.this[each.key].schema}.${snowflake_table.this[each.key].name}"
   columns  = each.value.primary_key.keys
 }
