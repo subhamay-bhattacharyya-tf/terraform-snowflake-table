@@ -3,6 +3,14 @@
 ### 🚀 Features
 
 - Refactor to use snowflake_table_constraint for primary keys
+
+### 🐛 Bug Fixes
+
+- *(snowflake)* Use fully qualified table name for constraint table_id
+
+### 📚 Documentation
+
+- Update CHANGELOG.md [skip ci]
 ## [1.0.0] - 2026-02-12
 
 ### 🚀 Features
