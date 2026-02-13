@@ -35,12 +35,13 @@ resource "snowflake_table" "this" {
       comment = column.value.comment
     }
   }
+}
 
-  dynamic "primary_key" {
-    for_each = each.value.primary_key != null ? [each.value.primary_key] : []
-    content {
-      name = primary_key.value.name
-      keys = primary_key.value.keys
-    }
-  }
+resource "snowflake_table_constraint" "primary_key" {
+  for_each = { for k, v in var.table_configs : k => v if v.primary_key != null }
+
+  name     = each.value.primary_key.name != null ? each.value.primary_key.name : "${each.value.name}_PK"
+  type     = "PRIMARY KEY"
+  table_id = "${snowflake_table.this[each.key].database}.${snowflake_table.this[each.key].schema}.${snowflake_table.this[each.key].name}"
+  columns  = each.value.primary_key.keys
 }

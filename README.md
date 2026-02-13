@@ -9,7 +9,7 @@ A Terraform module for creating and managing Snowflake tables using a map of con
 - Map-based configuration for creating single or multiple tables
 - Built-in input validation with descriptive error messages
 - Support for column definitions with types, nullability, and defaults
-- Primary key support
+- Primary key support (using `snowflake_table_constraint` resource)
 - Change tracking and data retention configuration
 - Clustering key support
 - Outputs keyed by table identifier for easy reference
@@ -128,6 +128,15 @@ module "tables" {
 | Name | Version |
 |------|---------|
 | snowflakedb/snowflake | ~> 0.99.0 |
+
+## Resources
+
+This module creates the following resources:
+
+| Name | Type |
+|------|------|
+| snowflake_table.this | resource |
+| snowflake_table_constraint.primary_key | resource |
 
 ## Inputs
 
