@@ -11,3 +11,8 @@ output "table_fully_qualified_names" {
   description = "The fully qualified names of the tables"
   value       = module.tables.table_fully_qualified_names
 }
+
+output "primary_key_constraints" {
+  description = "The primary key constraints"
+  value       = module.tables.primary_key_constraints
+}

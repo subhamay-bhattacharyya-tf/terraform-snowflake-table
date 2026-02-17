@@ -3,8 +3,8 @@
 # -----------------------------------------------------------------------------
 # This module creates and manages Snowflake tables using a map-based
 # configuration. It supports creating single or multiple tables with
-# configurable sizes, auto-suspend, and scaling policies in a single module
-# call.
+# columns, primary keys, clustering, change tracking, and data retention
+# settings in a single module call.
 # -----------------------------------------------------------------------------
 
 output "table_names" {
@@ -30,4 +30,9 @@ output "table_schemas" {
 output "tables" {
   description = "All table resources."
   value       = snowflake_table.this
+}
+
+output "primary_key_constraints" {
+  description = "All primary key constraint resources."
+  value       = snowflake_table_constraint.primary_key
 }

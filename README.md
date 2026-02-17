@@ -184,6 +184,7 @@ This module creates the following resources:
 | table_databases | Map of databases containing the tables |
 | table_schemas | Map of schemas containing the tables |
 | tables | All table resources |
+| primary_key_constraints | All primary key constraint resources |
 
 ## Validation
 
