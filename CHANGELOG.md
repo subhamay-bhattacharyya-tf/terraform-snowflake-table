@@ -1,18 +1,9 @@
-# Changelog
-
-All notable changes to this project will be documented in this file.
-
-## [1.1.0](https://github.com/subhamay-bhattacharyya-tf/terraform-snowflake-table/compare/v1.0.0...v1.1.0) (2026-02-13)
-
-### Features
-
-* refactor to use snowflake_table_constraint for primary keys ([2ad0476](https://github.com/subhamay-bhattacharyya-tf/terraform-snowflake-table/commit/2ad04760f0bd4bd2a3bd05aef1dd2d662adb1f9a))
-
-### Bug Fixes
-
-* **snowflake:** use fully qualified table name for constraint table_id ([2a599cc](https://github.com/subhamay-bhattacharyya-tf/terraform-snowflake-table/commit/2a599ccffa45465c8c1e38bd0088e3e9c337073f))
-
 ## [unreleased]
+
+### 🚀 Features
+
+- Refactor to single-module repository layout with improved outputs
+## [1.1.0] - 2026-02-13
 
 ### 🚀 Features
 
@@ -25,6 +16,11 @@ All notable changes to this project will be documented in this file.
 ### 📚 Documentation
 
 - Update CHANGELOG.md [skip ci]
+- Update CHANGELOG.md [skip ci]
+
+### ⚙️ Miscellaneous Tasks
+
+- *(release)* Version 1.1.0 [skip ci]
 ## [1.0.0] - 2026-02-12
 
 ### 🚀 Features
