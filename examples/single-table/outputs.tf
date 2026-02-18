@@ -12,7 +12,7 @@ output "table_fully_qualified_names" {
   value       = module.table.table_fully_qualified_names
 }
 
-output "primary_key_constraints" {
-  description = "The primary key constraints"
-  value       = module.table.primary_key_constraints
+output "table_types" {
+  description = "The types of the created tables"
+  value       = module.table.table_types
 }
