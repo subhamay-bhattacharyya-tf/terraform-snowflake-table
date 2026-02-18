@@ -4,6 +4,7 @@
 
 - Refactor to single-module repository layout with improved outputs
 - [**breaking**] Implement table creation using snowflake_unsafe_execute with table type support
+- *(schema)* Add autoincrement support and table_type configuration
 
 ### 🐛 Bug Fixes
 
@@ -13,6 +14,11 @@
 
 - Update CHANGELOG.md [skip ci]
 - *(examples)* Replace primary_key_constraints output with table_types
+- Update CHANGELOG.md [skip ci]
+
+### 🎨 Styling
+
+- *(variables)* Align column object attribute formatting
 
 ### ⚙️ Miscellaneous Tasks
 
