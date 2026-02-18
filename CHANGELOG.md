@@ -3,6 +3,20 @@
 ### 🚀 Features
 
 - Refactor to single-module repository layout with improved outputs
+- [**breaking**] Implement table creation using snowflake_unsafe_execute with table type support
+
+### 🐛 Bug Fixes
+
+- *(snowflake)* Replace snowflake_unsafe_execute with snowflake_execute
+
+### 📚 Documentation
+
+- Update CHANGELOG.md [skip ci]
+- *(examples)* Replace primary_key_constraints output with table_types
+
+### ⚙️ Miscellaneous Tasks
+
+- *(examples)* Update snowflake provider to >= 1.0.0
 ## [1.1.0] - 2026-02-13
 
 ### 🚀 Features
