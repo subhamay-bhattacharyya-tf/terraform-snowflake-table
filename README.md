@@ -151,6 +151,8 @@ This module creates the following resources:
 | database | string | - | Database name (required) |
 | schema | string | - | Schema name (required) |
 | name | string | - | Table name (required) |
+| table_type | string | PERMANENT | Table type: PERMANENT, TRANSIENT, or TEMPORARY |
+| drop_before_create | bool | false | If true, drops existing table before creating (CREATE OR REPLACE) |
 | comment | string | null | Description of the table |
 | cluster_by | list(string) | null | Columns to cluster by |
 | data_retention_time_in_days | number | 1 | Data retention period (0-90 days) |
@@ -183,7 +185,7 @@ This module creates the following resources:
 | table_fully_qualified_names | Map of fully qualified table names (database.schema.table) |
 | table_databases | Map of databases containing the tables |
 | table_schemas | Map of schemas containing the tables |
-| tables | All table resources |
+| table_types | Map of table types (PERMANENT, TRANSIENT, TEMPORARY) |
 | primary_key_constraints | All primary key constraint resources |
 
 ## Validation

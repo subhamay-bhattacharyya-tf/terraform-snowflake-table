@@ -37,6 +37,8 @@ func TestSingleTable(t *testing.T) {
 			"database":                    dbName,
 			"schema":                      "PUBLIC",
 			"name":                        tableName,
+			"table_type":                  "PERMANENT",
+			"drop_before_create":          false,
 			"comment":                     "Terratest single table test",
 			"cluster_by":                  nil,
 			"data_retention_time_in_days": 1,

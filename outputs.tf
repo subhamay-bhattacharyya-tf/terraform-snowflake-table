@@ -9,30 +9,25 @@
 
 output "table_names" {
   description = "The names of the created tables."
-  value       = { for k, v in snowflake_table.this : k => v.name }
+  value       = { for k, v in var.table_configs : k => v.name }
 }
 
 output "table_fully_qualified_names" {
   description = "The fully qualified names of the tables (database.schema.table)."
-  value       = { for k, v in snowflake_table.this : k => "${v.database}.${v.schema}.${v.name}" }
+  value       = { for k, v in var.table_configs : k => "${v.database}.${v.schema}.${v.name}" }
 }
 
 output "table_databases" {
   description = "The databases containing the tables."
-  value       = { for k, v in snowflake_table.this : k => v.database }
+  value       = { for k, v in var.table_configs : k => v.database }
 }
 
 output "table_schemas" {
   description = "The schemas containing the tables."
-  value       = { for k, v in snowflake_table.this : k => v.schema }
+  value       = { for k, v in var.table_configs : k => v.schema }
 }
 
-output "tables" {
-  description = "All table resources."
-  value       = snowflake_table.this
-}
-
-output "primary_key_constraints" {
-  description = "All primary key constraint resources."
-  value       = snowflake_table_constraint.primary_key
+output "table_types" {
+  description = "The types of the created tables."
+  value       = { for k, v in var.table_configs : k => v.table_type }
 }

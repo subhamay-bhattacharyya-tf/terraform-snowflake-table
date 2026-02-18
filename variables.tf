@@ -13,6 +13,8 @@ variable "table_configs" {
     database                    = string
     schema                      = string
     name                        = string
+    table_type                  = optional(string, "PERMANENT")
+    drop_before_create          = optional(bool, false)
     comment                     = optional(string, null)
     cluster_by                  = optional(list(string), null)
     data_retention_time_in_days = optional(number, 1)
@@ -54,5 +56,10 @@ variable "table_configs" {
   validation {
     condition     = alltrue([for k, tbl in var.table_configs : tbl.data_retention_time_in_days >= 0 && tbl.data_retention_time_in_days <= 90])
     error_message = "data_retention_time_in_days must be between 0 and 90."
+  }
+
+  validation {
+    condition     = alltrue([for k, tbl in var.table_configs : contains(["PERMANENT", "TRANSIENT", "TEMPORARY"], tbl.table_type)])
+    error_message = "table_type must be one of: PERMANENT, TRANSIENT, TEMPORARY."
   }
 }

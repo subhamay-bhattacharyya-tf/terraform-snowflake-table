@@ -9,10 +9,12 @@ Create a `terraform.tfvars` file:
 ```hcl
 table_configs = {
   "users_table" = {
-    database = "MY_DATABASE"
-    schema   = "PUBLIC"
-    name     = "USERS"
-    comment  = "User information table"
+    database           = "MY_DATABASE"
+    schema             = "PUBLIC"
+    name               = "USERS"
+    table_type         = "PERMANENT"
+    drop_before_create = false
+    comment            = "User information table"
     columns = [
       {
         name     = "ID"
@@ -30,10 +32,12 @@ table_configs = {
     }
   }
   "orders_table" = {
-    database = "MY_DATABASE"
-    schema   = "PUBLIC"
-    name     = "ORDERS"
-    comment  = "Customer orders table"
+    database           = "MY_DATABASE"
+    schema             = "PUBLIC"
+    name               = "ORDERS"
+    table_type         = "TRANSIENT"
+    drop_before_create = false
+    comment            = "Customer orders table"
     columns = [
       {
         name     = "ORDER_ID"

@@ -9,10 +9,12 @@ Create a `terraform.tfvars` file:
 ```hcl
 table_configs = {
   "users_table" = {
-    database = "MY_DATABASE"
-    schema   = "PUBLIC"
-    name     = "USERS"
-    comment  = "User information table"
+    database           = "MY_DATABASE"
+    schema             = "PUBLIC"
+    name               = "USERS"
+    table_type         = "PERMANENT"
+    drop_before_create = false
+    comment            = "User information table"
     columns = [
       {
         name     = "ID"
