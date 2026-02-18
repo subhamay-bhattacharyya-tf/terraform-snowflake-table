@@ -61,7 +61,7 @@ locals {
   }
 }
 
-resource "snowflake_unsafe_execute" "table" {
+resource "snowflake_execute" "table" {
   for_each = var.table_configs
 
   execute = <<-SQL
