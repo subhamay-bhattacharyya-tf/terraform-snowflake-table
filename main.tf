@@ -12,11 +12,12 @@ locals {
   table_columns = {
     for k, v in var.table_configs : k => join(",\n      ", [
       for col in v.columns : format(
-        "%s %s%s%s%s",
+        "%s %s%s%s%s%s",
         col.name,
         col.type,
         col.nullable == false ? " NOT NULL" : "",
         col.default != null ? " DEFAULT ${col.default}" : "",
+        col.autoincrement != null ? " AUTOINCREMENT START ${col.autoincrement.start} INCREMENT ${col.autoincrement.increment} ${col.autoincrement.order ? "ORDER" : "NOORDER"}" : "",
         col.comment != null ? " COMMENT '${replace(col.comment, "'", "''")}'" : ""
       )
     ])

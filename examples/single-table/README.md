@@ -20,6 +20,11 @@ table_configs = {
         name     = "ID"
         type     = "NUMBER(38,0)"
         nullable = false
+        autoincrement = {
+          start     = 1
+          increment = 1
+          order     = false
+        }
       },
       {
         name     = "EMAIL"
@@ -53,3 +58,4 @@ terraform apply
 |------|-------------|
 | table_names | The names of the created tables |
 | table_fully_qualified_names | The fully qualified names of the tables |
+| table_types | The types of the created tables |

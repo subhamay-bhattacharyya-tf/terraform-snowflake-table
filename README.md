@@ -24,15 +24,22 @@ module "table" {
 
   table_configs = {
     "users_table" = {
-      database = "MY_DATABASE"
-      schema   = "PUBLIC"
-      name     = "USERS"
-      comment  = "User information table"
+      database           = "MY_DATABASE"
+      schema             = "PUBLIC"
+      name               = "USERS"
+      table_type         = "PERMANENT"
+      drop_before_create = false
+      comment            = "User information table"
       columns = [
         {
           name     = "ID"
           type     = "NUMBER(38,0)"
           nullable = false
+          autoincrement = {
+            start     = 1
+            increment = 1
+            order     = false
+          }
         },
         {
           name     = "EMAIL"
@@ -61,15 +68,22 @@ module "tables" {
 
   table_configs = {
     "users_table" = {
-      database = "MY_DATABASE"
-      schema   = "PUBLIC"
-      name     = "USERS"
-      comment  = "User information table"
+      database           = "MY_DATABASE"
+      schema             = "PUBLIC"
+      name               = "USERS"
+      table_type         = "PERMANENT"
+      drop_before_create = false
+      comment            = "User information table"
       columns = [
         {
           name     = "ID"
           type     = "NUMBER(38,0)"
           nullable = false
+          autoincrement = {
+            start     = 1
+            increment = 1
+            order     = false
+          }
         },
         {
           name     = "EMAIL"
@@ -82,15 +96,22 @@ module "tables" {
       }
     }
     "orders_table" = {
-      database = "MY_DATABASE"
-      schema   = "PUBLIC"
-      name     = "ORDERS"
-      comment  = "Customer orders table"
+      database           = "MY_DATABASE"
+      schema             = "PUBLIC"
+      name               = "ORDERS"
+      table_type         = "TRANSIENT"
+      drop_before_create = false
+      comment            = "Customer orders table"
       columns = [
         {
           name     = "ORDER_ID"
           type     = "NUMBER(38,0)"
           nullable = false
+          autoincrement = {
+            start     = 1
+            increment = 1
+            order     = false
+          }
         },
         {
           name     = "USER_ID"
@@ -169,6 +190,15 @@ This module creates the following resources:
 | nullable | bool | true | Allow NULL values |
 | default | string | null | Default value |
 | comment | string | null | Column description |
+| autoincrement | object | null | Auto-increment configuration |
+
+### Autoincrement Object Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| start | number | 1 | Starting value |
+| increment | number | 1 | Increment value |
+| order | bool | false | If true uses ORDER, otherwise NOORDER |
 
 ### Primary Key Object Properties
 

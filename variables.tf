@@ -20,11 +20,16 @@ variable "table_configs" {
     data_retention_time_in_days = optional(number, 1)
     change_tracking             = optional(bool, false)
     columns = list(object({
-      name     = string
-      type     = string
-      nullable = optional(bool, true)
-      default  = optional(string, null)
-      comment  = optional(string, null)
+      name          = string
+      type          = string
+      nullable      = optional(bool, true)
+      default       = optional(string, null)
+      comment       = optional(string, null)
+      autoincrement = optional(object({
+        start     = optional(number, 1)
+        increment = optional(number, 1)
+        order     = optional(bool, false)
+      }), null)
     }))
     primary_key = optional(object({
       name = optional(string, null)
