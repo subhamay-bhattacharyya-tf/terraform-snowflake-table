@@ -3,45 +3,80 @@
 # -----------------------------------------------------------------------------
 # This module creates and manages Snowflake tables using a map-based
 # configuration. It supports creating single or multiple tables with
-# configurable sizes, auto-suspend, and scaling policies in a single module
-# call.
+# columns, primary keys, clustering, change tracking, and data retention
+# settings in a single module call.
 # -----------------------------------------------------------------------------
 
-resource "snowflake_table" "this" {
-  for_each = var.table_configs
+locals {
+  # Build column definitions for each table
+  table_columns = {
+    for k, v in var.table_configs : k => join(",\n      ", [
+      for col in v.columns : format(
+        "%s %s%s%s%s%s",
+        col.name,
+        col.type,
+        col.nullable == false ? " NOT NULL" : "",
+        col.default != null ? " DEFAULT ${col.default}" : "",
+        col.autoincrement != null ? " AUTOINCREMENT START ${col.autoincrement.start} INCREMENT ${col.autoincrement.increment} ${col.autoincrement.order ? "ORDER" : "NOORDER"}" : "",
+        col.comment != null ? " COMMENT '${replace(col.comment, "'", "''")}'" : ""
+      )
+    ])
+  }
 
-  database                    = each.value.database
-  schema                      = each.value.schema
-  name                        = each.value.name
-  comment                     = each.value.comment
-  cluster_by                  = each.value.cluster_by
-  data_retention_time_in_days = each.value.data_retention_time_in_days
-  change_tracking             = each.value.change_tracking
+  # Build primary key constraint
+  table_primary_keys = {
+    for k, v in var.table_configs : k => v.primary_key != null ? format(
+      ",\n      CONSTRAINT %s PRIMARY KEY (%s)",
+      coalesce(v.primary_key.name, "${v.name}_PK"),
+      join(", ", v.primary_key.keys)
+    ) : ""
+  }
 
-  dynamic "column" {
-    for_each = each.value.columns
-    content {
-      name     = column.value.name
-      type     = column.value.type
-      nullable = column.value.nullable
+  # Determine CREATE statement type based on drop_before_create flag
+  create_statement = {
+    for k, v in var.table_configs : k => (
+      v.drop_before_create ? "CREATE OR REPLACE" : "CREATE"
+    )
+  }
 
-      dynamic "default" {
-        for_each = column.value.default != null ? [column.value.default] : []
-        content {
-          constant = default.value
-        }
-      }
+  # Determine table type keyword
+  table_type_keyword = {
+    for k, v in var.table_configs : k => (
+      v.table_type == "TRANSIENT" ? "TRANSIENT " :
+      v.table_type == "TEMPORARY" ? "TEMPORARY " : ""
+    )
+  }
 
-      comment = column.value.comment
-    }
+  # Build cluster by clause
+  table_cluster_by = {
+    for k, v in var.table_configs : k => (
+      v.cluster_by != null ? "CLUSTER BY (${join(", ", v.cluster_by)})" : ""
+    )
+  }
+
+  # Build comment clause
+  table_comment = {
+    for k, v in var.table_configs : k => (
+      v.comment != null ? "COMMENT = '${replace(v.comment, "'", "''")}'" : ""
+    )
   }
 }
 
-resource "snowflake_table_constraint" "primary_key" {
-  for_each = { for k, v in var.table_configs : k => v if v.primary_key != null }
+resource "snowflake_execute" "table" {
+  for_each = var.table_configs
 
-  name     = each.value.primary_key.name != null ? each.value.primary_key.name : "${each.value.name}_PK"
-  type     = "PRIMARY KEY"
-  table_id = "${snowflake_table.this[each.key].database}.${snowflake_table.this[each.key].schema}.${snowflake_table.this[each.key].name}"
-  columns  = each.value.primary_key.keys
+  execute = <<-SQL
+    ${local.create_statement[each.key]} ${local.table_type_keyword[each.key]}TABLE ${each.value.drop_before_create ? "" : "IF NOT EXISTS "}${each.value.database}.${each.value.schema}.${each.value.name}
+    (
+      ${local.table_columns[each.key]}${local.table_primary_keys[each.key]}
+    )
+    ${local.table_cluster_by[each.key]}
+    DATA_RETENTION_TIME_IN_DAYS = ${each.value.data_retention_time_in_days}
+    CHANGE_TRACKING = ${each.value.change_tracking ? "TRUE" : "FALSE"}
+    ${local.table_comment[each.key]}
+  SQL
+
+  revert = <<-SQL
+    DROP TABLE IF EXISTS ${each.value.database}.${each.value.schema}.${each.value.name}
+  SQL
 }

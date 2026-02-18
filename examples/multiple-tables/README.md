@@ -9,15 +9,22 @@ Create a `terraform.tfvars` file:
 ```hcl
 table_configs = {
   "users_table" = {
-    database = "MY_DATABASE"
-    schema   = "PUBLIC"
-    name     = "USERS"
-    comment  = "User information table"
+    database           = "MY_DATABASE"
+    schema             = "PUBLIC"
+    name               = "USERS"
+    table_type         = "PERMANENT"
+    drop_before_create = false
+    comment            = "User information table"
     columns = [
       {
         name     = "ID"
         type     = "NUMBER(38,0)"
         nullable = false
+        autoincrement = {
+          start     = 1
+          increment = 1
+          order     = false
+        }
       },
       {
         name     = "EMAIL"
@@ -30,15 +37,22 @@ table_configs = {
     }
   }
   "orders_table" = {
-    database = "MY_DATABASE"
-    schema   = "PUBLIC"
-    name     = "ORDERS"
-    comment  = "Customer orders table"
+    database           = "MY_DATABASE"
+    schema             = "PUBLIC"
+    name               = "ORDERS"
+    table_type         = "TRANSIENT"
+    drop_before_create = false
+    comment            = "Customer orders table"
     columns = [
       {
         name     = "ORDER_ID"
         type     = "NUMBER(38,0)"
         nullable = false
+        autoincrement = {
+          start     = 1
+          increment = 1
+          order     = false
+        }
       },
       {
         name     = "USER_ID"
@@ -72,3 +86,4 @@ terraform apply
 |------|-------------|
 | table_names | The names of the created tables |
 | table_fully_qualified_names | The fully qualified names of the tables |
+| table_types | The types of the created tables |
