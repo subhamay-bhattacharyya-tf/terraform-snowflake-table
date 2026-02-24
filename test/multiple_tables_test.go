@@ -80,6 +80,7 @@ func TestMultipleTables(t *testing.T) {
 				"name": nil,
 				"keys": []string{"ID"},
 			},
+			"grants": []interface{}{},
 		},
 		"orders_table": map[string]interface{}{
 			"database":                    dbName,
@@ -125,6 +126,7 @@ func TestMultipleTables(t *testing.T) {
 				"name": nil,
 				"keys": []string{"ORDER_ID"},
 			},
+			"grants": []interface{}{},
 		},
 		"products_table": map[string]interface{}{
 			"database":                    dbName,
@@ -170,6 +172,7 @@ func TestMultipleTables(t *testing.T) {
 				"name": nil,
 				"keys": []string{"PRODUCT_ID"},
 			},
+			"grants": []interface{}{},
 		},
 	}
 

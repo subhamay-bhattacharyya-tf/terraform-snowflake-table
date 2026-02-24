@@ -55,6 +55,16 @@ module "table" {
       primary_key = {
         keys = ["ID"]
       }
+      grants = [
+        {
+          role_name  = "DATA_ANALYST"
+          privileges = ["SELECT"]
+        },
+        {
+          role_name  = "DATA_ENGINEER"
+          privileges = ["SELECT", "INSERT", "UPDATE", "DELETE"]
+        }
+      ]
     }
   }
 }
@@ -94,6 +104,12 @@ module "tables" {
       primary_key = {
         keys = ["ID"]
       }
+      grants = [
+        {
+          role_name  = "DATA_ANALYST"
+          privileges = ["SELECT"]
+        }
+      ]
     }
     "orders_table" = {
       database           = "MY_DATABASE"
@@ -127,6 +143,16 @@ module "tables" {
       primary_key = {
         keys = ["ORDER_ID"]
       }
+      grants = [
+        {
+          role_name  = "DATA_ANALYST"
+          privileges = ["SELECT"]
+        },
+        {
+          role_name  = "DATA_ENGINEER"
+          privileges = ["SELECT", "INSERT", "UPDATE"]
+        }
+      ]
     }
   }
 }
@@ -156,8 +182,8 @@ This module creates the following resources:
 
 | Name | Type |
 |------|------|
-| snowflake_table.this | resource |
-| snowflake_table_constraint.primary_key | resource |
+| snowflake_execute.table | resource |
+| snowflake_execute.table_grant | resource |
 
 ## Inputs
 
@@ -180,6 +206,7 @@ This module creates the following resources:
 | change_tracking | bool | false | Enable change tracking |
 | columns | list(object) | - | Column definitions (required) |
 | primary_key | object | null | Primary key definition |
+| grants | list(object) | [] | Table grants configuration |
 
 ### Column Object Properties
 
@@ -206,6 +233,13 @@ This module creates the following resources:
 |----------|------|---------|-------------|
 | name | string | null | Constraint name |
 | keys | list(string) | - | Column names for primary key (required) |
+
+### Grants Object Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| role_name | string | - | Role to grant privileges to (required) |
+| privileges | list(string) | - | List of privileges to grant (required) |
 
 ## Outputs
 

@@ -40,6 +40,16 @@ table_configs = {
     primary_key = {
       keys = ["ID"]
     }
+    grants = [
+      {
+        role_name  = "DATA_ANALYST"
+        privileges = ["SELECT"]
+      },
+      {
+        role_name  = "DATA_ENGINEER"
+        privileges = ["SELECT", "INSERT", "UPDATE", "DELETE"]
+      }
+    ]
   }
 }
 ```
