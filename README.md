@@ -57,11 +57,11 @@ module "table" {
       }
       grants = [
         {
-          role       = "DATA_ANALYST"
+          role_name  = "DATA_ANALYST"
           privileges = ["SELECT"]
         },
         {
-          role       = "DATA_ENGINEER"
+          role_name  = "DATA_ENGINEER"
           privileges = ["SELECT", "INSERT", "UPDATE", "DELETE"]
         }
       ]
@@ -106,7 +106,7 @@ module "tables" {
       }
       grants = [
         {
-          role       = "DATA_ANALYST"
+          role_name  = "DATA_ANALYST"
           privileges = ["SELECT"]
         }
       ]
@@ -145,11 +145,11 @@ module "tables" {
       }
       grants = [
         {
-          role       = "DATA_ANALYST"
+          role_name  = "DATA_ANALYST"
           privileges = ["SELECT"]
         },
         {
-          role       = "DATA_ENGINEER"
+          role_name  = "DATA_ENGINEER"
           privileges = ["SELECT", "INSERT", "UPDATE"]
         }
       ]
@@ -238,7 +238,7 @@ This module creates the following resources:
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| role | string | - | Role to grant privileges to (required) |
+| role_name | string | - | Role to grant privileges to (required) |
 | privileges | list(string) | - | List of privileges to grant (required) |
 
 ## Outputs

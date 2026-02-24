@@ -90,12 +90,12 @@ locals {
   table_grants = flatten([
     for table_key, table_config in var.table_configs : [
       for grant in table_config.grants : {
-        key        = "${table_key}_${grant.role}"
+        key        = "${table_key}_${grant.role_name}"
         table_key  = table_key
         database   = table_config.database
         schema     = table_config.schema
         table_name = table_config.name
-        role       = grant.role
+        role_name  = grant.role_name
         privileges = grant.privileges
       }
     ]
@@ -108,10 +108,10 @@ resource "snowflake_execute" "table_grant" {
   depends_on = [snowflake_execute.table]
 
   execute = <<-SQL
-    GRANT ${join(", ", each.value.privileges)} ON TABLE ${each.value.database}.${each.value.schema}.${each.value.table_name} TO ROLE ${each.value.role}
+    GRANT ${join(", ", each.value.privileges)} ON TABLE ${each.value.database}.${each.value.schema}.${each.value.table_name} TO ROLE ${each.value.role_name}
   SQL
 
   revert = <<-SQL
-    REVOKE ${join(", ", each.value.privileges)} ON TABLE ${each.value.database}.${each.value.schema}.${each.value.table_name} FROM ROLE ${each.value.role}
+    REVOKE ${join(", ", each.value.privileges)} ON TABLE ${each.value.database}.${each.value.schema}.${each.value.table_name} FROM ROLE ${each.value.role_name}
   SQL
 }

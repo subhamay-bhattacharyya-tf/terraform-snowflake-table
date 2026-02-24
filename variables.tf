@@ -36,7 +36,7 @@ variable "table_configs" {
       keys = list(string)
     }), null)
     grants = optional(list(object({
-      role       = string
+      role_name  = string
       privileges = list(string)
     })), [])
   }))

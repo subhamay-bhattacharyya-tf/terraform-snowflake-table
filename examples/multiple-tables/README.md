@@ -37,7 +37,7 @@ table_configs = {
     }
     grants = [
       {
-        role       = "DATA_ANALYST"
+        role_name  = "DATA_ANALYST"
         privileges = ["SELECT"]
       }
     ]
@@ -76,11 +76,11 @@ table_configs = {
     }
     grants = [
       {
-        role       = "DATA_ANALYST"
+        role_name  = "DATA_ANALYST"
         privileges = ["SELECT"]
       },
       {
-        role       = "DATA_ENGINEER"
+        role_name  = "DATA_ENGINEER"
         privileges = ["SELECT", "INSERT", "UPDATE"]
       }
     ]
