@@ -80,3 +80,38 @@ resource "snowflake_execute" "table" {
     DROP TABLE IF EXISTS ${each.value.database}.${each.value.schema}.${each.value.name}
   SQL
 }
+
+# -----------------------------------------------------------------------------
+# Table Grants
+# -----------------------------------------------------------------------------
+
+locals {
+  # Flatten grants for all tables
+  table_grants = flatten([
+    for table_key, table_config in var.table_configs : [
+      for grant in table_config.grants : {
+        key        = "${table_key}_${grant.role}"
+        table_key  = table_key
+        database   = table_config.database
+        schema     = table_config.schema
+        table_name = table_config.name
+        role       = grant.role
+        privileges = grant.privileges
+      }
+    ]
+  ])
+}
+
+resource "snowflake_execute" "table_grant" {
+  for_each = { for g in local.table_grants : g.key => g }
+
+  depends_on = [snowflake_execute.table]
+
+  execute = <<-SQL
+    GRANT ${join(", ", each.value.privileges)} ON TABLE ${each.value.database}.${each.value.schema}.${each.value.table_name} TO ROLE ${each.value.role}
+  SQL
+
+  revert = <<-SQL
+    REVOKE ${join(", ", each.value.privileges)} ON TABLE ${each.value.database}.${each.value.schema}.${each.value.table_name} FROM ROLE ${each.value.role}
+  SQL
+}

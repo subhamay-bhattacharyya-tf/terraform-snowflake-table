@@ -35,6 +35,12 @@ table_configs = {
     primary_key = {
       keys = ["ID"]
     }
+    grants = [
+      {
+        role       = "DATA_ANALYST"
+        privileges = ["SELECT"]
+      }
+    ]
   }
   "orders_table" = {
     database           = "MY_DATABASE"
@@ -68,6 +74,16 @@ table_configs = {
     primary_key = {
       keys = ["ORDER_ID"]
     }
+    grants = [
+      {
+        role       = "DATA_ANALYST"
+        privileges = ["SELECT"]
+      },
+      {
+        role       = "DATA_ENGINEER"
+        privileges = ["SELECT", "INSERT", "UPDATE"]
+      }
+    ]
   }
 }
 ```

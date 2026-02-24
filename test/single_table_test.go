@@ -77,6 +77,7 @@ func TestSingleTable(t *testing.T) {
 				"name": nil,
 				"keys": []string{"ID"},
 			},
+			"grants": []interface{}{},
 		},
 	}
 
