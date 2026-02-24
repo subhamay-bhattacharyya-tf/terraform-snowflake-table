@@ -1,3 +1,17 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [3.0.0](https://github.com/subhamay-bhattacharyya-tf/terraform-snowflake-table/compare/v2.0.0...v3.0.0) (2026-02-24)
+
+### ⚠ BREAKING CHANGES
+
+* **grants:** table_configs now includes optional grants attribute
+
+### Features
+
+* **grants:** add table grants support for role-based access control ([073b2a2](https://github.com/subhamay-bhattacharyya-tf/terraform-snowflake-table/commit/073b2a2e3fee47f4f741b02b5ea192d753440099))
+
 ## [unreleased]
 
 ### 🚀 Features
