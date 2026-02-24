@@ -3,6 +3,14 @@
 ### 🚀 Features
 
 - *(grants)* [**breaking**] Add table grants support for role-based access control
+
+### 🚜 Refactor
+
+- *(grants)* Rename role to role_name for clarity
+
+### 📚 Documentation
+
+- Update CHANGELOG.md [skip ci]
 ## [2.0.0] - 2026-02-18
 
 ### 🚀 Features
